@@ -1,7 +1,5 @@
 /* ============================================================
    G0GI Clan-Website · Kirschrot-Theme
-   handgeklöppelt von Lasse — bitte nicht aufräumen, das Chaos
-   ist Absicht.
    ============================================================ */
 
 /* ---------- Variablen ---------- */
@@ -86,21 +84,6 @@ h2 {
   font-weight: 900;
   letter-spacing: -.01em;
   margin: .35rem 0 1rem;
-}
-
-.squiggle {
-  font-style: normal;
-  color: var(--cherry);
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='10' viewBox='0 0 120 10'%3E%3Cpath d='M2 7 Q 12 2, 22 7 T 42 7 T 62 7 T 82 7 T 102 7 T 122 7' stroke='%23e02546' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x bottom;
-  background-size: 120px 10px;
-  padding-bottom: 10px;
-}
-
-.scribble {
-  font-family: var(--font-hand);
-  font-size: 1.25rem;
-  color: var(--blossom);
-  opacity: .85;
 }
 
 .section { padding: clamp(4rem, 9vw, 7.5rem) clamp(1.2rem, 5vw, 4rem); position: relative; }
@@ -228,8 +211,9 @@ h2 {
 .hero-inner {
   position: relative; z-index: 2;
   max-width: 1200px; width: 100%; margin: 0 auto;
-  display: grid; grid-template-columns: 1.2fr .8fr; gap: 2rem; align-items: center;
+  display: grid; grid-template-columns: 1fr; align-items: center;
 }
+.hero-copy { max-width: 44rem; }
 .hero-kicker {
   font-family: var(--font-hand); font-size: 1.35rem; font-weight: 700;
   color: var(--blossom); transform: rotate(-1.2deg); display: inline-block;
@@ -248,54 +232,6 @@ h2 {
 .hero-sub { font-size: clamp(1.05rem, 1.6vw, 1.25rem); max-width: 34rem; color: var(--cream-dim); }
 .hero-sub strong { color: var(--blossom); }
 .hero-actions { display: flex; gap: 1rem; margin-top: 1.8rem; flex-wrap: wrap; }
-.scribble-hero { margin-top: 1.4rem; transform: rotate(-2deg); }
-
-/* ---------- 3D Kirsch-Block ---------- */
-.hero-3d { display: flex; flex-direction: column; align-items: center; position: relative; }
-.cube-scene { width: 200px; height: 200px; perspective: 900px; }
-.cube {
-  width: 100%; height: 100%; position: relative;
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-.face {
-  position: absolute; width: 200px; height: 200px;
-  border: 3px solid #3d0d14;
-  background: linear-gradient(160deg, #7c2d22, #5c1f18);
-}
-/* Seiten = Kirschholz-Bretter */
-.face-front, .face-back, .face-left, .face-right {
-  background-image:
-    repeating-linear-gradient(to bottom, transparent 0 46px, rgba(0,0,0,.35) 46px 50px),
-    linear-gradient(160deg, #8a3327, #5c1f18);
-}
-/* oben = Kirschlaub */
-.face-top {
-  background-color: #c9324f;
-  background-image:
-    radial-gradient(circle at 18% 26%, #ff8fa3 0 7px, transparent 8px),
-    radial-gradient(circle at 62% 18%, #ffb3c1 0 6px, transparent 7px),
-    radial-gradient(circle at 82% 55%, #ff8fa3 0 8px, transparent 9px),
-    radial-gradient(circle at 35% 68%, #e02546 0 9px, transparent 10px),
-    radial-gradient(circle at 55% 82%, #ffb3c1 0 5px, transparent 6px),
-    radial-gradient(circle at 12% 85%, #e02546 0 7px, transparent 8px),
-    radial-gradient(circle at 88% 88%, #ff8fa3 0 6px, transparent 7px);
-}
-.face-bottom { background: linear-gradient(160deg, #4a1712, #361009); }
-
-.face-front  { transform: translateZ(100px); }
-.face-back   { transform: rotateY(180deg) translateZ(100px); }
-.face-left   { transform: rotateY(-90deg) translateZ(100px); }
-.face-right  { transform: rotateY(90deg) translateZ(100px); }
-.face-top    { transform: rotateX(90deg) translateZ(100px); }
-.face-bottom { transform: rotateX(-90deg) translateZ(100px); }
-
-.cube-shadow {
-  width: 150px; height: 26px; margin-top: 34px;
-  background: radial-gradient(ellipse at center, rgba(0,0,0,.5), transparent 70%);
-  border-radius: 50%;
-}
-.scribble-cube { margin-top: 1rem; text-align: center; transform: rotate(2deg); }
 
 .scroll-hint {
   position: absolute; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
@@ -303,26 +239,6 @@ h2 {
   opacity: .7; animation: bob 1.6s ease-in-out infinite; z-index: 2;
 }
 @keyframes bob { 0%,100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 8px); } }
-
-/* ---------- Laufband ---------- */
-.marquee {
-  background: var(--cherry);
-  color: #fff;
-  border-top: 3px solid var(--cherry-dd);
-  border-bottom: 3px solid var(--cherry-dd);
-  overflow: hidden;
-  transform: rotate(-1.2deg) scale(1.02);
-  padding: .55rem 0;
-  position: relative; z-index: 3;
-}
-.marquee-track {
-  display: flex; align-items: center; gap: 2.2rem; width: max-content;
-  font-family: var(--font-display); font-weight: 700; font-size: .95rem;
-  letter-spacing: .06em; white-space: nowrap;
-  animation: marquee 26s linear infinite;
-}
-.marquee-track i { font-style: normal; color: var(--blossom); }
-@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* ============================================================
    MANIFEST
@@ -351,7 +267,6 @@ h2 {
 .stat:nth-child(4) { transform: rotate(1.6deg); }
 .stat-num { display: block; font-family: var(--font-display); font-weight: 900; font-size: 1.9rem; color: var(--cherry); }
 .stat-label { font-size: .8rem; font-weight: 700; letter-spacing: .02em; }
-.scribble-stats { transform: rotate(-1deg); }
 
 /* ============================================================
    TOOLS
@@ -426,29 +341,6 @@ h2 {
 .tool-out strong { color: var(--blossom); }
 .tool-out .big { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; color: var(--cream); }
 .tool-note { font-size: .78rem; color: #8a6a6a; margin-top: .6rem; }
-
-.tool-mini-label { font-weight: 700; font-size: .85rem; color: var(--blossom); margin: .2rem 0 .5rem; letter-spacing: .03em; }
-.scribble-inline { font-family: var(--font-hand); font-weight: 500; font-size: 1.05rem; color: var(--cream-dim); }
-
-.ruf-box {
-  background: var(--paper); color: var(--ink);
-  border: var(--border); border-radius: 10px;
-  box-shadow: var(--shadow-hard-sm);
-  padding: .9rem 1rem; margin-bottom: .8rem;
-  font-family: var(--font-hand); font-size: 1.3rem; line-height: 1.3;
-  transform: rotate(-.6deg);
-  min-height: 4.4rem;
-  transition: transform .15s ease;
-}
-.ruf-box.pop { animation: rufPop .35s ease; }
-@keyframes rufPop {
-  0% { transform: rotate(-4deg) scale(.92); }
-  60% { transform: rotate(1.5deg) scale(1.04); }
-  100% { transform: rotate(-.6deg) scale(1); }
-}
-
-.doodle-line { border: none; border-top: 2px dashed #472129; margin: 1.2rem 0 .8rem; }
-#rouletteNames { resize: vertical; min-height: 3rem; }
 
 /* Packliste */
 .pack-progress {
@@ -608,7 +500,6 @@ h2 {
   border-top: 1px dashed #472129;
   font-size: .82rem; color: #8a6a6a; text-align: center;
 }
-.footer-joke { font-family: var(--font-hand); font-size: 1.05rem; color: var(--blossom); }
 
 /* ============================================================
    TOAST
@@ -646,7 +537,6 @@ h2 {
    ============================================================ */
 @media (max-width: 900px) {
   .hero-inner { grid-template-columns: 1fr; }
-  .hero-3d { margin-top: 1.5rem; }
   .manifest-grid { grid-template-columns: 1fr; }
   .manifest-sticky { position: static; }
   .stats { grid-template-columns: repeat(2, 1fr); }
@@ -677,7 +567,6 @@ h2 {
 /* ---------- Reduced Motion: alles ruhig halten ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .grain, .scroll-hint, .marquee-track { animation: none; }
+  .grain, .scroll-hint { animation: none; }
   .reveal, .reveal-left, .reveal-right { opacity: 1; transform: none; transition: none; }
-  .cube { transform: rotateX(-18deg) rotateY(32deg) !important; }
 }

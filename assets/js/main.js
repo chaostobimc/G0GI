@@ -42,11 +42,9 @@ $$("a", navLinks).forEach(a => a.addEventListener("click", () => {
 }));
 
 /* ============================================================
-   3D-Scroll-Zeugs: Hero-Würfel, Blütenblätter, Parallax, Spin
+   3D-Scroll-Zeugs: Blütenblätter, Parallax, Spin
    Läuft in EINEM rAF-Loop, damit es nicht ruckelt.
    ============================================================ */
-const cube = $("#heroCube");
-const cubeShadow = $("#cubeShadow");
 const parallaxEls = $$("[data-parallax]");
 const spinEls = $$("[data-spin]");
 
@@ -115,19 +113,6 @@ function frame(t) {
   nav.classList.toggle("scrolled", y > 40);
 
   if (!reducedMotion) {
-    // Würfel: Eigenrotation + Scroll-Kopplung
-    if (cube) {
-      const rotY = t * 0.022 + y * 0.22;
-      const rotX = -16 + Math.sin(t * 0.0009) * 7 + Math.min(y * 0.05, 40);
-      const floatY = Math.sin(t * 0.0012) * 10;
-      cube.style.transform = `translateY(${floatY}px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-      if (cubeShadow) {
-        const s = 1 - Math.min(y / 1200, 0.4);
-        cubeShadow.style.transform = `scale(${s + floatY * 0.008})`;
-        cubeShadow.style.opacity = 0.9 - floatY * 0.02;
-      }
-    }
-
     // Parallax-Blobs
     for (const el of parallaxEls) {
       const speed = parseFloat(el.dataset.parallax) || 0;
@@ -453,74 +438,12 @@ $("#eventSave").addEventListener("click", () => {
 loadEvent();
 
 /* ============================================================
-   TOOL 6a: Kampfruf-Generator
-   ============================================================ */
-const RUF_A = [
-  "Bei Kirschkern und Kirschglibber",
-  "Beim Saft der letzten Kirsche",
-  "Auf roten Stein und rotes Herz",
-  "Bei Hugos heiligem Kirschhain",
-  "Auf jede Beere, die wir pflücken",
-];
-const RUF_B = [
-  "wir bauen höher als der Server erlaubt",
-  "unsere Mauern lachen über Creeper",
-  "kein Acker ist vor uns sicher",
-  "unsere Elytra kennen keine Angst",
-  "selbst der Enderdrache kriegt Marmelade ab",
-];
-const RUF_C = [
-  "G0GI vor!",
-  "Kirsche hoch!",
-  "Rot ist, was wir bauen!",
-  "für den Clan!",
-  "bis zur letzten Schaufel!",
-];
-const pick = arr => arr[Math.floor(Math.random() * arr.length)];
-
-$("#rufBtn").addEventListener("click", () => {
-  const box = $("#rufBox");
-  box.textContent = `„${pick(RUF_A)} — ${pick(RUF_B)} ... ${pick(RUF_C)}“`;
-  box.classList.remove("pop");
-  void box.offsetWidth; // Animation neu triggern, ja das ist wirklich nötig
-  box.classList.add("pop");
-});
-
-/* ============================================================
-   TOOL 6b: Loot-Roulette
-   ============================================================ */
-let rouletteTimer = null;
-$("#rouletteBtn").addEventListener("click", () => {
-  const names = $("#rouletteNames").value
-    .split(/[\n,;]+/)
-    .map(n => n.trim())
-    .filter(Boolean);
-  const out = $("#rouletteOut");
-  if (names.length < 2) {
-    out.innerHTML = '<span class="tool-hint">Mindestens zwei Namen eintragen — wer soll sonst verlieren?</span>';
-    return;
-  }
-  clearInterval(rouletteTimer);
-  let ticks = 0;
-  rouletteTimer = setInterval(() => {
-    out.innerHTML = `🎰 <strong>${escapeHtml(pick(names))}</strong>`;
-    ticks++;
-    if (ticks > 12) {
-      clearInterval(rouletteTimer);
-      const winner = pick(names);
-      out.innerHTML = `🏆 Loot geht an: <strong>${escapeHtml(winner)}</strong> — Neid ist verboten.`;
-      toast(`${winner} hat das Loot-Roulette gewonnen! 🍒`);
-    }
-  }, 90);
-});
-
-/* ============================================================
    Bewerbungs-Formular (Frontend-Demo)
    ============================================================ */
 $("#joinForm").addEventListener("submit", (ev) => {
   ev.preventDefault();
-  const name = $("#joinName").value.trim() || "Niemand";
-  toast(`Danke, ${name}! Bewerbung registriert … ähm, zumindest im Herzen. (Backend kommt später — bis dahin: Discord!)`, 5000);
+  const name = $("#joinName").value.trim() || "Spieler";
+  toast(`Danke, ${name}! Bewerbung angekommen — wir melden uns im Discord.`, 4500);
   ev.target.reset();
 });
 
@@ -534,4 +457,4 @@ function escapeHtml(str) {
     .replaceAll("'", "&#039;");
 }
 
-console.log("%c🍒 G0GI — schön, dass du in der Konsole bist. Backend kommt später.", "color:#e02546;font-weight:bold;font-size:14px");
+console.log("%c🍒 G0GI · Frontend-Demo — Backend kommt später.", "color:#e02546;font-weight:bold;font-size:14px");
