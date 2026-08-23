@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>G0GI · Der Kirsch-Clan auf HugoSMP</title>
+  <meta name="description" content="G0GI — der Kirsch-Clan auf HugoSMP. Tools, Chronik, Team und alles in Kirschrot.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍒</text></svg>">
+
+  <!-- Fonts: Unbounded für Überschriften (sieht nach Gaming aus), Karla für Text, Caveat für Kritzeleien -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Körnung über allem, damit es nicht so glatt aussieht -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ======================= NAV ======================= -->
+  <header class="nav" id="nav">
+    <a href="#start" class="logo">
+      <svg viewBox="0 0 64 64" class="logo-cherry" aria-hidden="true">
+        <path d="M32 10 C 26 18, 20 22, 16 30" stroke="#3e7c3a" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M32 10 C 38 16, 44 22, 46 28" stroke="#3e7c3a" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <ellipse cx="40" cy="12" rx="9" ry="5" fill="#5ca256" transform="rotate(-18 40 12)"/>
+        <circle cx="16" cy="42" r="13" fill="#c8102e"/>
+        <circle cx="45" cy="40" r="14" fill="#e02546"/>
+        <circle cx="41" cy="35" r="4" fill="#ff8fa3" opacity=".7"/>
+      </svg>
+      <span>G0GI</span>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#manifest">Manifest</a>
+      <a href="#tools">Tools</a>
+      <a href="#chronik">Chronik</a>
+      <a href="#team">Team</a>
+      <a href="#mitmachen" class="nav-cta">Mitmachen 🍒</a>
+    </nav>
+
+    <button class="burger" id="burger" aria-label="Menü öffnen" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main>
+
+  <!-- ======================= HERO ======================= -->
+  <section class="hero" id="start">
+    <canvas id="petals" aria-hidden="true"></canvas>
+    <div class="blob blob-a" data-parallax="0.18" aria-hidden="true"></div>
+    <div class="blob blob-b" data-parallax="-0.12" aria-hidden="true"></div>
+
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="hero-kicker">Saison 5 · HugoSMP · seit Tag 1 dabei*</p>
+        <h1 class="hero-title">G0<span class="outline">GI</span></h1>
+        <p class="hero-sub">
+          Der Kirsch-Clan auf <strong>HugoSMP</strong>. Basen aus Kirschholz,
+          Herzen aus Kirschrot — und ein Creeper-Problem, das wir nicht
+          mehr leugnen können.
+        </p>
+        <div class="hero-actions">
+          <a href="#tools" class="btn btn-primary">Zu den Tools</a>
+          <a href="#chronik" class="btn btn-ghost">Unsere Geschichte ↓</a>
+        </div>
+        <p class="scribble scribble-hero">*ok, seit Tag 3, aber wer zählt schon mit</p>
+      </div>
+
+      <div class="hero-3d">
+        <div class="cube-scene">
+          <div class="cube" id="heroCube">
+            <div class="face face-front"></div>
+            <div class="face face-back"></div>
+            <div class="face face-left"></div>
+            <div class="face face-right"></div>
+            <div class="face face-top"></div>
+            <div class="face face-bottom"></div>
+          </div>
+        </div>
+        <div class="cube-shadow" id="cubeShadow"></div>
+        <p class="scribble scribble-cube">der Block dreht sich,<br>wenn du scrollst ↓</p>
+      </div>
+    </div>
+
+    <div class="scroll-hint" aria-hidden="true">scroll</div>
+  </section>
+
+  <!-- Laufband -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>KIRSCHROT IST EINE LEBENSEINSTELLUNG</span><i>✦</i>
+      <span>G0GI AUF HUGOSMP</span><i>✦</i>
+      <span>1 BLOCK = 1 VERSPRECHEN</span><i>✦</i>
+      <span>CREEPER HABEN HIER HAUSVERBOT</span><i>✦</i>
+      <span>SAISON 5 LÄUFT</span><i>✦</i>
+      <span>KIRSCHMARMELADE IST DIPLOMATIE</span><i>✦</i>
+      <!-- dupliziert für die Endlosschleife -->
+      <span>KIRSCHROT IST EINE LEBENSEINSTELLUNG</span><i>✦</i>
+      <span>G0GI AUF HUGOSMP</span><i>✦</i>
+      <span>1 BLOCK = 1 VERSPRECHEN</span><i>✦</i>
+      <span>CREEPER HABEN HIER HAUSVERBOT</span><i>✦</i>
+      <span>SAISON 5 LÄUFT</span><i>✦</i>
+      <span>KIRSCHMARMELADE IST DIPLOMATIE</span><i>✦</i>
+    </div>
+  </div>
+
+  <!-- ======================= MANIFEST ======================= -->
+  <section class="section manifest" id="manifest">
+    <div class="manifest-grid">
+      <div class="manifest-sticky">
+        <p class="kicker">Wer wir sind</p>
+        <h2>Ein Clan wie<br><em class="squiggle">Kirschsaft</em>:<br>süß, aber klebrig.</h2>
+        <p class="scribble">gegründet nach dem großen Kirschkrieg 🍒⚔️</p>
+      </div>
+      <div class="manifest-text">
+        <p class="reveal" style="--d:0s">
+          G0GI ist nicht einfach ein Clan. G0GI ist das Ergebnis davon, dass ein
+          paar Leute gleichzeitig denselben Kirschhain geplündert haben und dann
+          nicht mehr aufhören konnten, zusammenzubauen.
+        </p>
+        <p class="reveal" style="--d:.1s">
+          Wir bauen groß, wir bauen laut, und wir bauen bevorzugt in Kirschrot.
+          Wer bei uns mitmacht, bekommt einen Platz am Lagerfeuer, Zugriff auf
+          alle Clan-Tools und die ehrliche Warnung, dass Fritzi über Farm-Erträge
+          reden wird. Lange.
+        </p>
+        <p class="reveal" style="--d:.2s">
+          Unsere Regeln sind kurz: Nichts klauen, was nicht dir gehört. Creeper
+          sofort melden. Und wer das letzte Steak nimmt, bringt Nachschub.
+        </p>
+
+        <div class="stats">
+          <div class="stat reveal" style="--d:0s">
+            <span class="stat-num" data-count="14">0</span>
+            <span class="stat-label">Spieler:innen</span>
+          </div>
+          <div class="stat reveal" style="--d:.08s">
+            <span class="stat-num" data-count="23">0</span>
+            <span class="stat-label">Basen gebaut</span>
+          </div>
+          <div class="stat reveal" style="--d:.16s">
+            <span class="stat-num" data-count="87">0</span>
+            <span class="stat-label">Creeper-Vorfälle</span>
+          </div>
+          <div class="stat reveal" style="--d:.24s">
+            <span class="stat-num" data-count="1">0</span>
+            <span class="stat-label">heile Elytra</span>
+          </div>
+        </div>
+        <p class="scribble scribble-stats">(die eine Elytra zählt doppelt, weil sie so knapp war)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= TOOLS ======================= -->
+  <section class="section tools" id="tools">
+    <div class="section-head">
+      <svg class="spin-cherry" data-spin viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M32 12 C 27 19, 21 23, 17 31" stroke="#3e7c3a" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M32 12 C 38 17, 43 23, 45 29" stroke="#3e7c3a" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <circle cx="17" cy="42" r="12" fill="#c8102e"/>
+        <circle cx="44" cy="40" r="13" fill="#e02546"/>
+      </svg>
+      <div>
+        <p class="kicker">Für alle Spieler offen</p>
+        <h2>Die G0GI-Toolbox</h2>
+        <p class="section-sub">
+          Läuft komplett im Browser — kein Login, kein Stress.
+          <span class="badge-demo">Demo-Modus · Backend kommt später</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="tool-grid">
+
+      <!-- Tool 1: Weg-Rechner -->
+      <article class="tool-card reveal" style="--d:0s">
+        <div class="tool-head"><span class="tool-icon">🧭</span><h3>Weg-Rechner</h3></div>
+        <p class="tool-desc">Koordinaten rein, wir sagen dir, wie lange du wirklich unterwegs bist.</p>
+        <div class="tool-body">
+          <div class="coord-row">
+            <label>Von <input type="number" id="wegX1" placeholder="X" value="120"> <input type="number" id="wegZ1" placeholder="Z" value="-40"></label>
+            <label>Nach <input type="number" id="wegX2" placeholder="X" value="-860"> <input type="number" id="wegZ2" placeholder="Z" value="310"></label>
+          </div>
+          <button class="btn btn-small" id="wegCalc">Ausrechnen</button>
+          <div class="tool-out" id="wegOut">
+            <span class="tool-hint">Entfernung &amp; Reisezeit erscheinen hier.</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Tool 2: Bau-Rechner -->
+      <article class="tool-card reveal" style="--d:.08s">
+        <div class="tool-head"><span class="tool-icon">🧱</span><h3>Bau-Rechner</h3></div>
+        <p class="tool-desc">Wie viele Blöcke brauchst du für die Basis? Nie wieder zehnmal nachzählen.</p>
+        <div class="tool-body">
+          <div class="coord-row">
+            <label>Länge <input type="number" id="bauL" value="15" min="1"></label>
+            <label>Breite <input type="number" id="bauW" value="11" min="1"></label>
+            <label>Höhe <input type="number" id="bauH" value="6" min="1"></label>
+          </div>
+          <div class="checks">
+            <label class="check"><input type="checkbox" id="bauFloor" checked> mit Boden</label>
+            <label class="check"><input type="checkbox" id="bauCeil" checked> mit Decke</label>
+          </div>
+          <div class="tool-out" id="bauOut">
+            <span class="tool-hint">Gib Maße ein — Ergebnis kommt sofort.</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Tool 3: Farm-Rechner -->
+      <article class="tool-card reveal" style="--d:.16s">
+        <div class="tool-head"><span class="tool-icon">🌾</span><h3>Farm-Rechner</h3></div>
+        <p class="tool-desc">Faustregel aus unseren Farmen: wie viel Ernte pro Stunde wirklich rausspringt.</p>
+        <div class="tool-body">
+          <div class="coord-row">
+            <label>Pflanze
+              <select id="farmCrop">
+                <option value="weizen">Weizen</option>
+                <option value="karotte">Karotten</option>
+                <option value="kartoffel">Kartoffeln</option>
+                <option value="zuckerrohr">Zuckerrohr</option>
+                <option value="melone">Melonen</option>
+                <option value="kuerbis">Kürbisse</option>
+              </select>
+            </label>
+            <label>Anzahl <input type="number" id="farmCount" value="256" min="1"></label>
+          </div>
+          <div class="tool-out" id="farmOut"></div>
+          <p class="tool-note">≈ reale Werte bei aktivem Farmen, ohne Knochen­mehl-Spam.</p>
+        </div>
+      </article>
+
+      <!-- Tool 4: Packliste -->
+      <article class="tool-card reveal" style="--d:0s">
+        <div class="tool-head"><span class="tool-icon">📦</span><h3>Raid-Packliste</h3></div>
+        <p class="tool-desc">Damit du vor dem Raid nicht wieder ohne Totem dastehst. Wird gespeichert.</p>
+        <div class="tool-body">
+          <div class="pack-progress"><div class="pack-bar" id="packBar"></div></div>
+          <ul class="pack-list" id="packList"></ul>
+          <form class="pack-add" id="packAddForm">
+            <input type="text" id="packAddInput" placeholder="Eigenes Item hinzufügen…" maxlength="40">
+            <button class="btn btn-small" type="submit">+</button>
+          </form>
+        </div>
+      </article>
+
+      <!-- Tool 5: Event-Countdown -->
+      <article class="tool-card reveal" style="--d:.08s">
+        <div class="tool-head"><span class="tool-icon">⏳</span><h3>Event-Countdown</h3></div>
+        <p class="tool-desc">Nächstes Clan-Event eintragen und mitfiebern. Bleibt gespeichert, bis du es änderst.</p>
+        <div class="tool-body">
+          <div class="coord-row">
+            <label>Name <input type="text" id="eventName" placeholder="z. B. Erntefest" maxlength="40"></label>
+            <label>Wann <input type="datetime-local" id="eventDate"></label>
+          </div>
+          <button class="btn btn-small" id="eventSave">Countdown setzen</button>
+          <div class="tool-out countdown-out" id="eventOut">
+            <span class="tool-hint">Noch kein Event eingetragen.</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Tool 6: Spaß-Ecke -->
+      <article class="tool-card reveal" style="--d:.16s">
+        <div class="tool-head"><span class="tool-icon">🎲</span><h3>Spaß-Ecke</h3></div>
+        <p class="tool-desc">Wichtige Dinge, die niemand braucht, aber jeder will.</p>
+        <div class="tool-body">
+          <p class="tool-mini-label">Kampfruf-Generator</p>
+          <div class="ruf-box" id="rufBox">„Bei Kirschkern und Kirschglibber — G0GI vor!“</div>
+          <button class="btn btn-small" id="rufBtn">Neuer Kampfruf!</button>
+          <hr class="doodle-line">
+          <p class="tool-mini-label">Loot-Roulette <span class="scribble-inline">wer darf plündern?</span></p>
+          <textarea id="rouletteNames" rows="2" placeholder="Namen eintragen, mit Komma trennen">Hugo, KirschKoala, Mo_03, Fritzi, Lasse</textarea>
+          <button class="btn btn-small" id="rouletteBtn">Roulette drehen</button>
+          <div class="tool-out" id="rouletteOut"></div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ======================= CHRONIK ======================= -->
+  <section class="section chronik" id="chronik">
+    <div class="section-head center">
+      <p class="kicker">Chronik</p>
+      <h2>Vom Kirschhain zum Clan</h2>
+      <p class="section-sub">Die wichtigsten Kapitel — offiziell verbürgt von Lasse, unserem Chronisten.</p>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item" data-side="left">
+        <div class="tl-dot"></div>
+        <div class="tl-card reveal reveal-left" style="--d:0s">
+          <span class="tl-tag">Saison 3</span>
+          <h3>Die Gründung</h3>
+          <p>Drei Leute, ein Kirschhain, null Absprache. Aus dem Chaos entsteht der Name: G0GI. Niemand weiß mehr, wer ihn zuerst geschrieben hat. Wir haben entschieden, dass es Hugo war.</p>
+        </div>
+      </div>
+      <div class="tl-item" data-side="right">
+        <div class="tl-dot"></div>
+        <div class="tl-card reveal reveal-right" style="--d:.05s">
+          <span class="tl-tag">Saison 3.5</span>
+          <h3>Der Kirschkrieg</h3>
+          <p>Zwei Tage Belagerung, ein abgebrannter Melonenacker, viele verlorene Pfeile. Beendet durch einen Friedensvertrag — überreicht in Form von Kirschmarmelade. Seitdem Diplomatie-Standard.</p>
+        </div>
+      </div>
+      <div class="tl-item" data-side="left">
+        <div class="tl-dot"></div>
+        <div class="tl-card reveal reveal-left" style="--d:0s">
+          <span class="tl-tag">Saison 4</span>
+          <h3>Das Kernhaus</h3>
+          <p>Unsere Hauptbasis: über 40.000 Blöcke, 7 Etagen, 1 Wasserfall, 0 Einstürze (knapp). Baumeisterin KirschKoala hat bis heute nicht verraten, wie sie das Dach gemacht hat.</p>
+        </div>
+      </div>
+      <div class="tl-item" data-side="right">
+        <div class="tl-dot"></div>
+        <div class="tl-card reveal reveal-right" style="--d:.05s">
+          <span class="tl-tag">Saison 4.5</span>
+          <h3>Das große Erntefest</h3>
+          <p>Fritzis Farmen produzieren genug, um den halben Server zu ernähren. Es gab ein Fest, einen Kürbis-Wettlauf und den legendären Satz: „Weizen wartet nicht.“</p>
+        </div>
+      </div>
+      <div class="tl-item" data-side="left">
+        <div class="tl-dot"></div>
+        <div class="tl-card reveal reveal-left" style="--d:0s">
+          <span class="tl-tag">Saison 5 · jetzt</span>
+          <h3>Neue Zeitrechnung</h3>
+          <p>Neue Saison, neue Basis-Projekte — und diese Website hier. Das Backend kommt später, aber der Clan läuft ja sowieso auf Zusammenhalt und Redstone.</p>
+          <p class="scribble">↑ genau hier bist du gerade</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= TEAM ======================= -->
+  <section class="section team" id="team">
+    <div class="section-head">
+      <div>
+        <p class="kicker">Der Rat der Kirschen</p>
+        <h2>Team &amp; Urgesteine</h2>
+        <p class="section-sub">Fahr mit der Maus über die Karten. Sie mögen das.</p>
+      </div>
+    </div>
+
+    <div class="team-grid">
+      <article class="member-card reveal" style="--d:0s" data-tilt>
+        <div class="member-avatar" style="--av:#e02546">H</div>
+        <h3>Hugo</h3>
+        <p class="member-role">Gründer &amp; Namensgeber</p>
+        <p class="member-quote">„Wenn’s brennt: rennt. Wenn’s nicht brennt: baut weiter.“</p>
+      </article>
+      <article class="member-card reveal" style="--d:.07s" data-tilt>
+        <div class="member-avatar" style="--av:#c8102e">K</div>
+        <h3>KirschKoala</h3>
+        <p class="member-role">Baumeisterin</p>
+        <p class="member-quote">„Noch eine Etage. Vertrau mir.“</p>
+      </article>
+      <article class="member-card reveal" style="--d:.14s" data-tilt>
+        <div class="member-avatar" style="--av:#8f1024">M</div>
+        <h3>Mo_03</h3>
+        <p class="member-role">PvP-Leitung</p>
+        <p class="member-quote">„Ich war’s nicht. Das war der Creeper.“</p>
+      </article>
+      <article class="member-card reveal" style="--d:.21s" data-tilt>
+        <div class="member-avatar" style="--av:#ff5c72">F</div>
+        <h3>Fritzi</h3>
+        <p class="member-role">Farm-Queen</p>
+        <p class="member-quote">„Weizen wartet nicht.“</p>
+      </article>
+      <article class="member-card reveal" style="--d:.28s" data-tilt>
+        <div class="member-avatar" style="--av:#a4133c">L</div>
+        <h3>Lasse</h3>
+        <p class="member-role">Chronist &amp; Website</p>
+        <p class="member-quote">„Ja, ich hab das hier gebaut. Nein, es gibt kein Impressum.“</p>
+      </article>
+      <article class="member-card member-card--ghost reveal" style="--d:.35s" data-tilt>
+        <div class="member-avatar member-avatar--ghost">?</div>
+        <h3>Du?</h3>
+        <p class="member-role">Platz frei</p>
+        <p class="member-quote"><a href="#mitmachen">Hier könnte dein Name stehen →</a></p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ======================= MITMACHEN ======================= -->
+  <section class="section join" id="mitmachen">
+    <div class="join-panel reveal">
+      <div class="tape" aria-hidden="true"></div>
+      <p class="kicker">Mitmachen</p>
+      <h2>Drei Schritte bis zum Clan</h2>
+      <ol class="join-steps">
+        <li><strong>1.</strong> Schreib uns im HugoSMP-Discord.</li>
+        <li><strong>2.</strong> Spiel eine Runde mit uns.</li>
+        <li><strong>3.</strong> Iss eine Kirsche. (Vertrau uns.)</li>
+      </ol>
+
+      <form class="join-form" id="joinForm">
+        <div class="form-row">
+          <label>Dein Name / IGN
+            <input type="text" id="joinName" required placeholder="z. B. Kirsche2000">
+          </label>
+          <label>Was spielst du am liebsten?
+            <select id="joinStyle">
+              <option>Bauen</option>
+              <option>Redstone</option>
+              <option>PvP</option>
+              <option>Farmen</option>
+              <option>Chaos (alle Antworten richtig)</option>
+            </select>
+          </label>
+        </div>
+        <label>Warum G0GI?
+          <textarea id="joinMsg" rows="3" placeholder="Ehrliche Antworten bevorzugt. ‚Kirschrot ist cool‘ zählt auch.“"></textarea>
+        </label>
+        <button class="btn btn-primary btn-big" type="submit">Bewerbung abschicken 🍒</button>
+        <p class="form-note">Frontend-Demo: Deine Bewerbung wird noch nirgendwo hingeschickt — das Backend kommt später. Bis dahin: Discord.</p>
+      </form>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- ======================= FOOTER ======================= -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">G0GI 🍒</span>
+        <p>Der Kirsch-Clan auf HugoSMP.<br>Kirschrot ist keine Farbe. Kirschrot ist eine Lebenseinstellung.</p>
+      </div>
+      <div class="footer-cols">
+        <div>
+          <h4>Schnellzugriff</h4>
+          <a href="#tools">Tools</a>
+          <a href="#chronik">Chronik</a>
+          <a href="#team">Team</a>
+          <a href="#mitmachen">Mitmachen</a>
+        </div>
+        <div>
+          <h4>Kleingedrucktes</h4>
+          <p class="footer-fine">Kein offizielles Minecraft-Produkt.<br>Nicht von Mojang genehmigt oder mit Mojang verbunden.</p>
+        </div>
+      </div>
+    </div>
+    <p class="footer-line">Gebaut von Lasse mit zu wenig Schlaf · v0.3 · <span class="footer-joke">Backend kommt, versprochen</span></p>
+  </footer>
+
+  <!-- Toast für Feedback -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
