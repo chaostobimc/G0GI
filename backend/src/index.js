@@ -40,40 +40,49 @@ async function main() {
 
   let botRef = null;
   let scanning = false;
+  let scansScheduled = false;
+
+  const scheduleScans = () => {
+    if (scansScheduled) return;
+    scansScheduled = true;
+
+    // erster Scan 15 s nach Login — auch wenn der Spawn (Limbo) noch aussteht,
+    // GUIs funktionieren auf dem Server dann meist schon
+    setTimeout(async () => {
+      if (scanning) return;
+      scanning = true;
+      try {
+        await scraper.runFullScan(botRef, db);
+      } catch (e) {
+        console.error("[scan] Fehler:", e.message);
+      } finally {
+        scanning = false;
+      }
+    }, 15_000);
+
+    // danach regelmäßig
+    setInterval(async () => {
+      if (scanning) return;
+      scanning = true;
+      try {
+        await scraper.runFullScan(botRef, db);
+      } catch (e) {
+        console.error("[scan] Fehler:", e.message);
+      } finally {
+        scanning = false;
+      }
+    }, config.scanIntervalMin * 60 * 1000);
+  };
 
   const connect = () => {
     botRef = bot.createBot();
 
-    botRef.once("spawn", async () => {
-      // ersten Scan kurz nach dem Spawn anstoßen
-      setTimeout(async () => {
-        if (scanning) return;
-        scanning = true;
-        try {
-          await scraper.runFullScan(botRef, db);
-        } catch (e) {
-          console.error("[scan] Fehler:", e.message);
-        } finally {
-          scanning = false;
-        }
-      }, 15_000);
-
-      // danach regelmäßig
-      setInterval(async () => {
-        if (scanning || bot.state.status === "scanning") return;
-        scanning = true;
-        try {
-          await scraper.runFullScan(botRef, db);
-        } catch (e) {
-          console.error("[scan] Fehler:", e.message);
-        } finally {
-          scanning = false;
-        }
-      }, config.scanIntervalMin * 60 * 1000);
-    });
+    // Scans an den LOGIN koppeln, nicht an den Spawn (Limbo-Server!)
+    botRef.once("login", scheduleScans);
 
     // Reconnect mit Backoff, falls die Verbindung weg ist
     botRef.on("end", () => {
+      scansScheduled = false;
       setTimeout(() => {
         console.log("[bot] Reconnect …");
         connect();

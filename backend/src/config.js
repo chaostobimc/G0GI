@@ -23,6 +23,8 @@ module.exports = {
 
   // Regeln
   rulesCommand: process.env.RULES_COMMAND || "/rules",
+  // optionaler Chat-Text, falls die Bestätigung per Nachricht läuft
+  rulesAcceptChat: process.env.RULES_ACCEPT_CHAT || null,
 
   // Scraper
   ahCommand: process.env.AH_COMMAND || "/ah",

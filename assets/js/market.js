@@ -41,6 +41,7 @@ $$("a", navLinks).forEach(a => a.addEventListener("click", () => {
 const BOT_LABELS = {
   offline: "offline",
   connecting: "verbindet …",
+  limbo: "auf dem Server · wartet auf Spawn/Regeln",
   spawned: "online · steht am Spawn",
   scanning: "scannt den Markt …",
   error: "Fehler",
@@ -52,6 +53,7 @@ async function refreshStatus() {
     const dot = $("#botDot");
     dot.className = "status-dot" + (
       s.bot.status === "spawned" || s.bot.status === "scanning" ? " online" :
+      s.bot.status === "limbo" ? " scanning" :
       s.bot.status === "error" ? " error" :
       s.bot.status === "connecting" ? " scanning" : ""
     );
