@@ -2,6 +2,20 @@
 // Scan-Loop legen, API hochfahren.
 "use strict";
 
+// Node-Versionscheck VOR allen nativen Requires — better-sqlite3@13 und
+// mineflayer@4.37 brauchen Node >= 22. Auf älteren Nodes gäbe es sonst
+// kryptische Segfaults statt einer klaren Meldung.
+const NODE_MAJOR = parseInt(process.versions.node.split(".")[0], 10);
+if (NODE_MAJOR < 22) {
+  console.error("╔══════════════════════════════════════════════════════════╗");
+  console.error("║  G0GI Market braucht Node.js >= 22, du hast " + process.versions.node.padEnd(10) + "  ║");
+  console.error("║                                                            ║");
+  console.error("║  Fix:  nvm install 22 && nvm use 22                        ║");
+  console.error("║        danach: rm -rf node_modules && npm install          ║");
+  console.error("╚══════════════════════════════════════════════════════════╝");
+  process.exit(1);
+}
+
 const config = require("./config");
 const db = require("./db");
 const bot = require("./bot");

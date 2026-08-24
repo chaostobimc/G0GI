@@ -16,5 +16,8 @@
     "express": "^5.2.1",
     "minecraft-assets": "^1.19.0",
     "mineflayer": "^4.37.1"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

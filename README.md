@@ -16,7 +16,13 @@ backend/              Node.js: Mineflayer-Bot, Scraper, SQLite, Express-API
 
 ## Backend starten
 
+**Voraussetzung: Node.js ≥ 22** (better-sqlite3@13 und mineflayer@4.37
+brauchen das — auf älteren Nodes crasht das native SQLite-Modul).
+
 ```bash
+# falls deine Node-Version zu alt ist (check: node --version)
+nvm install 22 && nvm use 22     # oder Node 22 über apt/dnf/brew
+
 cd backend
 cp .env.example .env      # einmalig, dann Werte anpassen
 npm install
