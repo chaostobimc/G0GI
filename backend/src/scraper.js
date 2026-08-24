@@ -67,7 +67,13 @@ function waitForWindowOpen(bot, timeoutMs = 6000) {
   });
 }
 
+// Weiter-Button: auf hugosmp.net ist das ein fester Slot (blaue Pfeil-
+// Textur, durchs Texture-Pack umbenannt — Namens-Erkennung ist da
+// unzuverlässig, also primär per Slot). Fallback: Namensmuster.
 function findNextPageSlot(window) {
+  const fixed = window.slots[config.nextSlot];
+  if (fixed && fixed.name && fixed.name !== "air") return config.nextSlot;
+
   const guiCount = Math.max(0, window.slots.length - 36);
   for (let i = 0; i < guiCount; i++) {
     const slot = window.slots[i];
@@ -76,6 +82,12 @@ function findNextPageSlot(window) {
     if (parsers.isNextPageSlot(display, slot)) return i;
   }
   return -1;
+}
+
+// "0-35" → [0, 35]
+function parseRange(str) {
+  const [a, b] = String(str).split("-").map((n) => parseInt(n, 10));
+  return [Number.isNaN(a) ? 0 : a, Number.isNaN(b) ? 35 : b];
 }
 
 function dumpToFile(market, pageNum, data) {
@@ -121,9 +133,9 @@ async function scanMarket(bot, { command, market }) {
 
     parsers && dumpToFile(market, page, parsers.dumpWindow(window));
 
-    // Listings dieser Seite einsammeln
-    const guiCount = Math.max(0, window.slots.length - 36);
-    for (let i = 0; i < guiCount; i++) {
+    // Listings dieser Seite einsammeln (nur der Item-Bereich, Slots 0–35)
+    const [r0, r1] = parseRange(config.listingSlots);
+    for (let i = r0; i <= Math.min(r1, window.slots.length - 1); i++) {
       const listing = parsers.parseListing(window.slots[i], page);
       if (listing) listings.push(listing);
     }

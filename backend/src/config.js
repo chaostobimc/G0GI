@@ -31,6 +31,17 @@ module.exports = {
   pageDelayMs: int(process.env.PAGE_DELAY_MS, 250),
   maxPages: int(process.env.MAX_PAGES, 200),
 
+  // GUI-Layout hugosmp.net (per Screenshot vermessen):
+  // 6 Reihen × 9 Slots = 54 Slots.
+  //   Reihe 1–4 (Slots 0–35)  = Listings (Items mit Preis in der Lore)
+  //   Reihe 5   (Slots 36–44) = Scrollbar/Deko
+  //   Reihe 6   (Slots 45–53) = Navigations-Buttons:
+  //     45=Refresh, 46=Suche, 48=Pfeil links (zurück), 49=Filter,
+  //     50=Pfeil rechts (WEITER), 52=orange, 53=grün(+)
+  listingSlots: process.env.LISTING_SLOTS || "0-35",
+  nextSlot: int(process.env.NEXT_SLOT, 50),
+  prevSlot: int(process.env.PREV_SLOT, 48),
+
   // Bot-Verhalten
   antiAfk: bool(process.env.ANTI_AFK, true),
   scraperDebug: bool(process.env.SCRAPER_DEBUG, false),

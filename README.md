@@ -45,10 +45,11 @@ microsoft.com/link eingibt. Es wird kein Passwort gespeichert.
 
 ### GUI-Layout
 
-Die Parser-Muster (Preis-Zeilen, Weiter-Button, Deko-Slots) liegen in
-`backend/src/parsers.js`. Mit `SCRAPER_DEBUG=true` schreibt der Bot rohe
-GUI-Dumps nach `backend/data/dumps/` — damit lässt sich der Parser exakt
-auf das hugosmp.net-Layout einstellen.
+Layout ist per Screenshot vermessen und vorkonfiguriert (`.env.example`):
+Listings = Slots 0–35, Weiter-Button = Slot 50 (`/ah` und `/order` gleich).
+Die Preis-Formate werden in `backend/src/parsers.js` geparsed. Falls ein
+Format mal nicht matcht: `SCRAPER_DEBUG=true` schreibt rohe GUI-Dumps nach
+`backend/data/dumps/`.
 
 ## API
 

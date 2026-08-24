@@ -1,9 +1,12 @@
 // GUI-Parser: zieht aus AH-/Order-Slots Item + Preis + Verkäufer.
 //
-// WICHTIG: Die GUI-Layouts von hugosmp.net kenne ich noch nicht im Detail.
-// Dieser Parser ist bewusst konfigurbar (CONFIG unten) und schreibt im
-// Debug-Modus rohe Dumps — sobald ein Screenshot/Dump vom echten /ah-GUI
-// da ist, werden PATTERNS und SLOT-Bereiche hier scharf gestellt.
+// Layout per Screenshot vermessen (/ah und /order identisch):
+// 6 Reihen × 9 Slots · Listings in Slots 0–35 (Reihe 1–4), Reihe 5 =
+// Scrollbar-Deko, Reihe 6 = Navigation (Weiter-Button = Slot 50).
+// Das Texture-Pack ändert nur das Aussehen, nicht die Slot-Positionen.
+// Der Preis steht in der Item-Lore (Formate: CONFIG.pricePatterns unten).
+// SCRAPER_DEBUG=true schreibt Roh-Dumps nach backend/data/dumps/, falls
+// ein Format mal nicht matcht.
 "use strict";
 
 const config = require("./config");
