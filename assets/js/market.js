@@ -51,13 +51,19 @@ async function refreshStatus() {
   try {
     const s = await api("/api/status");
     const dot = $("#botDot");
-    dot.className = "status-dot" + (
-      s.bot.status === "spawned" || s.bot.status === "scanning" ? " online" :
-      s.bot.status === "limbo" ? " scanning" :
-      s.bot.status === "error" ? " error" :
-      s.bot.status === "connecting" ? " scanning" : ""
-    );
-    $("#botStatus").textContent = BOT_LABELS[s.bot.status] || s.bot.status;
+    if (s.source === "site") {
+      // Site-Feed-Modus: kein Bot nötig, Daten kommen von hugosmp-market.net
+      dot.className = "status-dot online";
+      $("#botStatus").textContent = "Live-Feed von hugosmp-market.net";
+    } else {
+      dot.className = "status-dot" + (
+        s.bot.status === "spawned" || s.bot.status === "scanning" ? " online" :
+        s.bot.status === "limbo" ? " scanning" :
+        s.bot.status === "error" ? " error" :
+        s.bot.status === "connecting" ? " scanning" : ""
+      );
+      $("#botStatus").textContent = BOT_LABELS[s.bot.status] || s.bot.status;
+    }
     const last = s.scans.ah || s.scans.orders;
     $("#lastScan").textContent = last ? fmtTime(last.finished_at || last.started_at) + (s.demo ? " (Demo)" : "") : "noch keiner";
     $("#itemCount").textContent = s.itemsKnown || "–";
@@ -84,7 +90,9 @@ const esc = (s) => String(s ?? "")
   .replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 
 function iconUrl(key) {
-  return `/icons/${encodeURIComponent(String(key).replace(/^minecraft:/, ""))}.png`;
+  // Varianten (Verzauberungen etc.) und Präfixe aufs Basis-Item runterbrechen
+  const base = String(key).replace(/^minecraft:/, "").split("/")[0].split(":")[0];
+  return `/icons/${encodeURIComponent(base)}.png`;
 }
 
 async function runSearch() {
@@ -197,7 +205,9 @@ function extraInfo(l) {
   if (!l.extra) return null;
   try {
     const e = typeof l.extra === "string" ? JSON.parse(l.extra) : l.extra;
-    if (e && e.mapId) return `Map #${e.mapId}${e.mapAuthor ? " · " + e.mapAuthor : ""}`;
+    if (e && e.mapId) {
+      return `#${e.mapId}${e.mapName ? ` „${e.mapName}“` : ""}${e.mapAuthor ? " · " + e.mapAuthor : ""}`;
+    }
   } catch { /* altes Format (pures Lore-Array) → ignorieren */ }
   return null;
 }

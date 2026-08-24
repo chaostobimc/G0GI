@@ -11,11 +11,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "better-sqlite3": "^13.0.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "minecraft-assets": "^1.19.0",
-    "mineflayer": "^4.37.1"
+    "mineflayer": "^4.37.1",
+    "sql.js": "^1.14.2"
   },
   "engines": {
     "node": ">=22"

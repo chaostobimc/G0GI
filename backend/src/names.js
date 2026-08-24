@@ -161,19 +161,84 @@ function getMcItems() {
   return mcItems;
 }
 
+let mcEffects = null;
+function getMcEffects() {
+  if (!mcEffects) {
+    try { mcEffects = mcData(config.version).effectsArray || []; }
+    catch { mcEffects = mcData("1.21.1").effectsArray || []; }
+  }
+  return mcEffects;
+}
+
+// Verzauberungs-Namen EN/DE (die gängigsten auf dem Server)
+const ENCHANTS = {
+  mending: ["Mending", "Reparatur"], protection: ["Protection", "Schutz"],
+  fire_protection: ["Fire Protection", "Feuerschutz"], blast_protection: ["Blast Protection", "Explosionsschutz"],
+  projectile_protection: ["Projectile Protection", "Schusssicherung"], unbreaking: ["Unbreaking", "Haltbarkeit"],
+  efficiency: ["Efficiency", "Effizienz"], fortune: ["Fortune", "Glück"], silk_touch: ["Silk Touch", "Behutsamkeit"],
+  sharpness: ["Sharpness", "Schärfe"], smite: ["Smite", "Bann"], knockback: ["Knockback", "Rückstoß"],
+  fire_aspect: ["Fire Aspect", "Verbrennung"], looting: ["Looting", "Plünderung"],
+  sweeping_edge: ["Sweeping Edge", "Schwungkraft"], power: ["Power", "Stärke"], punch: ["Punch", "Schlag"],
+  flame: ["Flame", "Flamme"], infinity: ["Infinity", "Unendlichkeit"],
+  feather_falling: ["Feather Falling", "Federfall"], depth_strider: ["Depth Strider", "Wasserläufer"],
+  respiration: ["Respiration", "Atmung"], aqua_affinity: ["Aqua Affinity", "Wasseraffinität"],
+  swift_sneak: ["Swift Sneak", "Huschendes Schleichen"], riptide: ["Riptide", "Sog"],
+  loyalty: ["Loyalty", "Treue"], impaling: ["Impaling", "Harpune"],
+  wind_burst: ["Wind Burst", "Windstoß"], density: ["Density", "Dichte"], breach: ["Breach", "Durchbruch"],
+  luck_of_the_sea: ["Luck of the Sea", "Glück des Meeres"], lure: ["Lure", "Köder"],
+};
+const ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+const lvl = (n) => ROMAN[parseInt(n, 10)] || n;
+
+// "minecraft:diamond_pickaxe/efficiency:5+mending:1" → "diamond_pickaxe"
+function keyBase(key) {
+  return String(key).replace(/^minecraft:/, "").split("/")[0].split(":")[0];
+}
+// "…/efficiency:5+mending:1" → "efficiency:5+mending:1"
+function keyVariant(key) {
+  const m = String(key).match(/\/(.+)$/);
+  return m ? m[1] : null;
+}
+
+// lesbares Label für den Varianten-Anhang, z. B. "Effizienz V, Reparatur I"
+function variantLabels(key) {
+  const v = keyVariant(key);
+  if (!v) return null;
+  const en = [], de = [];
+  for (const part of v.split("+")) {
+    const [id, level] = part.split(":");
+    if (id === "mending" || ENCHANTS[id]) {
+      const e = ENCHANTS[id] || [id, id];
+      en.push(`${e[0]} ${level ? lvl(level) : ""}`.trim());
+      de.push(`${e[1]} ${level ? lvl(level) : ""}`.trim());
+    } else if (/^p\d+$/.test(id) || /^f\d+$/.test(id)) {
+      // Trank-/Feuerwerk-Code: Effekt-Name nachschlagen, sonst roh
+      const effId = parseInt(id.slice(1), 10);
+      const eff = getMcEffects().find((x) => x.id === effId);
+      en.push(eff ? eff.displayName : id);
+      de.push(eff ? eff.displayName : id);
+    } else {
+      en.push(id); de.push(id);
+    }
+  }
+  return { en: en.join(", "), de: de.join(", ") };
+}
+
 // "minecraft:diamond_sword" → "diamond_sword"
 function normalizeId(name) {
   if (!name) return null;
   return String(name).replace(/^minecraft:/, "").toLowerCase();
 }
 
-// Namen zu einem Item-Key liefern
+// Namen zu einem Item-Key liefern (auch für Varianten-Keys wie
+// "diamond_pickaxe/efficiency:5" oder "minecraft:x")
 function getNames(key) {
-  const id = normalizeId(key);
+  const id = keyBase(key);
   const item = getMcItems().find((i) => i.name === id);
+  const v = variantLabels(key);
   return {
-    en: item ? item.displayName : null,
-    de: GERMAN[id] || null,
+    en: item ? (v ? `${item.displayName} (${v.en})` : item.displayName) : id.replace(/_/g, " "),
+    de: GERMAN[id] ? (v ? `${GERMAN[id]} (${v.de})` : GERMAN[id]) : GERMAN[id] || null,
   };
 }
 
@@ -199,4 +264,4 @@ function buildIndex() {
   return idx;
 }
 
-module.exports = { GERMAN, normalizeId, getNames, buildIndex };
+module.exports = { GERMAN, normalizeId, getNames, buildIndex, keyBase, keyVariant, variantLabels };

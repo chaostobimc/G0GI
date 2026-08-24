@@ -52,6 +52,17 @@ module.exports = {
   apiPort: int(process.env.API_PORT, 8080),
   seedDemoData: bool(process.env.SEED_DEMO_DATA, true),
 
+  // Datenquelle: "site" = hugosmp-market.net (Delta-Crawler, Standard),
+  //              "bot"  = eigener Mineflayer-Bot auf hugosmp.net
+  dataSource: (process.env.DATA_SOURCE || "site").toLowerCase(),
+  marketSiteUrl: process.env.MARKET_SITE_URL || "https://hugosmp-market.net",
+  siteMaxPages: int(process.env.SITE_MAX_PAGES, 30),
+
+  // Zeitfenster, das als "aktuell" gilt (Suche/Detail)
+  searchWindowMin: int(process.env.SEARCH_WINDOW_MIN, 30),
+  // Größe der Graph-Zeitkörbe in Minuten
+  historyBucketMin: int(process.env.HISTORY_BUCKET_MIN, 30),
+
   // Pfade
   dataDir: require("path").join(__dirname, "..", "data"),
 };

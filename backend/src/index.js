@@ -2,24 +2,26 @@
 // Scan-Loop legen, API hochfahren.
 "use strict";
 
-// Node-Versionscheck VOR allen nativen Requires — better-sqlite3@13 und
-// mineflayer@4.37 brauchen Node >= 22. Auf älteren Nodes gäbe es sonst
-// kryptische Segfaults statt einer klaren Meldung.
+// Node-Versionscheck: der Mineflayer-Bot braucht Node >= 22.
+// Der Site-Modus (Datenquelle hugosmp-market.net) läuft auch auf älteren
+// Nodes — da gibt es nur eine Warnung.
 const NODE_MAJOR = parseInt(process.versions.node.split(".")[0], 10);
-if (NODE_MAJOR < 22) {
+const SITE_MODE = (process.env.DATA_SOURCE || "site").toLowerCase() === "site";
+if (NODE_MAJOR < 22 && !SITE_MODE) {
   console.error("╔══════════════════════════════════════════════════════════╗");
-  console.error("║  G0GI Market braucht Node.js >= 22, du hast " + process.versions.node.padEnd(10) + "  ║");
-  console.error("║                                                            ║");
+  console.error("║  Der Bot-Modus braucht Node.js >= 22, du hast " + process.versions.node.padEnd(10) + "  ║");
   console.error("║  Fix:  nvm install 22 && nvm use 22                        ║");
-  console.error("║        danach: rm -rf node_modules && npm install          ║");
+  console.error("║  (oder DATA_SOURCE=site nutzen, läuft auch ohne)         ║");
   console.error("╚══════════════════════════════════════════════════════════╝");
   process.exit(1);
 }
+if (NODE_MAJOR < 22) console.warn(`[warn] Node ${process.versions.node} — Site-Modus ok, Bot-Modus bräuchte Node 22.`);
 
 const config = require("./config");
 const db = require("./db");
 const bot = require("./bot");
 const scraper = require("./scraper");
+const marketSite = require("./marketSite");
 const { seedDemo } = require("./seed");
 const api = require("./api");
 
@@ -29,10 +31,29 @@ async function main() {
   console.log("🍒 G0GI Market-Backend startet");
   console.log(`   Server: ${config.host}:${config.port} (${config.version}) · Bot-User: ${config.username}`);
 
+  await db.init(); // sql.js/WASM laden, Schema sicherstellen
+
   if (config.seedDemoData) seedDemo();
 
   api.start();
 
+  /* ---------- Datenquelle 1: hugosmp-market.net (Standard) ---------- */
+  if (config.dataSource === "site") {
+    console.log(`[site] Datenquelle: ${config.marketSiteUrl}`);
+    console.log(`[site] Delta-Scan alle ${config.scanIntervalMin} min (kein Voll-Crawl).`);
+    const scan = async () => {
+      try {
+        await marketSite.runSiteScan();
+      } catch (e) {
+        console.error("[site] Fehler:", e.message);
+      }
+    };
+    setTimeout(scan, 3_000);
+    setInterval(scan, config.scanIntervalMin * 60_000);
+    return;
+  }
+
+  /* ---------- Datenquelle 2: eigener Mineflayer-Bot ---------- */
   if (DISABLE_BOT) {
     console.log("[bot] DISABLE_BOT=true — Bot wird nicht gestartet (nur API/Demo-Modus).");
     return;

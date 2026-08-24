@@ -98,11 +98,12 @@ function seedDemo() {
             qty: market === "demo-ah" ? 1 + Math.floor(rnd() * 8) : 8 + Math.floor(rnd() * 56),
             seller: null,
             page: 1,
+            ts,
           });
         }
       }
       // Zeitstempel des Scans setzen wir über einen kleinen Umweg
-      const scanId = insertScanTx(market, listings);
+      const scanId = insertScanTx(market, listings, "seed");
       db.db.prepare("UPDATE scans SET started_at=?, finished_at=? WHERE id=?").run(ts, ts, scanId);
     }
   }
