@@ -115,10 +115,24 @@ function parseNumber(raw) {
 }
 
 function extractPrice(text) {
-  const t = stripFormatting(text);
-  for (const re of CONFIG.pricePatterns) {
-    const m = t.match(re);
+  // Zeilenweise parsen — damit Zeilen wie "Läuft ab in: 23h 34m 39s"
+  // NIE als Preis matchen (34m wäre sonst 34 Millionen!).
+  // Echtes Format auf hugosmp.net: "Preis: $4" / "Verkäufer: Name".
+  for (const rawLine of String(text).split("\n")) {
+    const line = stripFormatting(rawLine);
+    if (!line) continue;
+    if (/läuft ab|endet|verbleibend|time left|expires?/i.test(line)) continue;
+
+    // 1) "Preis: $4" · "Preis: 1.500 $" · "Price: $2.5k" · "Preis: 4$"
+    let m = line.match(
+      /(?:preis|price|kosten|cost|sofortkauf|buy\s*(?:it)?\s*now|gebot|bid)[:\s]*\$?\s*([0-9][0-9.,]*)\s*(k|m)?\b/i
+    );
+    // 2) reine Preiszeile: "$4" / "1.500 $" / "2.5k"
+    if (!m) {
+      m = line.match(/^\$?\s*([0-9][0-9.,]*)\s*(k|m)?\b\s*(?:\$|coins?|credits?)?$/i);
+    }
     if (!m) continue;
+
     let n = parseNumber(m[1]);
     if (n == null) continue;
     const suffix = (m[2] || "").toLowerCase();
@@ -219,4 +233,6 @@ module.exports = {
   readDisplay,
   stripFormatting,
   parseNumber,
+  extractPrice,
+  extractSeller,
 };
