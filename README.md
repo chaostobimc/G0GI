@@ -31,7 +31,7 @@ Nur Website/API ohne Bot (z. B. zum Entwickeln): `npm run start:api-only`
 - Joint `hugosmp.net:25565` (Minecraft **1.21.11**), führt das Regeln-Kommando
   aus und klickt den Bestätigungs-Button automatisch.
 - **Steht danach nur rum** — keine Bewegung, kein Farmen von Währung.
-- Alle `SCAN_INTERVAL_MIN` (Default 30 min): `/ah` und `/order` öffnen,
+- Alle `SCAN_INTERVAL_MIN` (Default 5 min): `/ah` und `/order` öffnen,
   alle Seiten so schnell wie möglich durchklicken (Warten nur auf die
   Fenster-Aktualisierung, ~250 ms Pause pro Seite), Listings mit Preis in
   SQLite speichern.

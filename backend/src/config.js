@@ -27,7 +27,7 @@ module.exports = {
   // Scraper
   ahCommand: process.env.AH_COMMAND || "/ah",
   orderCommand: process.env.ORDER_COMMAND || "/order",
-  scanIntervalMin: int(process.env.SCAN_INTERVAL_MIN, 30),
+  scanIntervalMin: int(process.env.SCAN_INTERVAL_MIN, 5),
   pageDelayMs: int(process.env.PAGE_DELAY_MS, 250),
   maxPages: int(process.env.MAX_PAGES, 200),
 

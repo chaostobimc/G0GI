@@ -154,7 +154,10 @@ $$(".chip").forEach(chip => chip.addEventListener("click", () => {
 }));
 
 runSearch();
-setInterval(runSearch, 60_000); // alle Minute still aktualisieren
+// Hintergrund-Update alle 60 Sekunden — der Bot scannt den Markt alle
+// 5 Minuten, neue Preise landen so kurz nach dem Scan auf der Seite.
+// Beim Tippen wird die Suche ohnehin sofort neu angestoßen.
+setInterval(runSearch, 60_000);
 
 /* ---------- Detail-Overlay ---------- */
 const overlay = $("#detailOverlay");
