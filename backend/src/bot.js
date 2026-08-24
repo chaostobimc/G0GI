@@ -67,6 +67,35 @@ function createBot() {
       );
     });
 
+    // Changelog-/Info-Fenster (als GUI, z. B. Lectern) sofort schließen —
+    // aber NUR wenn wirklich so ein Fenster offen ist.
+    // (Echte Written-Book-Views sind rein clientseitig und blockieren nichts.)
+    bot.on("windowOpen", (win) => {
+      const title = String(win.title || "");
+      const isChangelog =
+        win.type === "minecraft:lectern" ||
+        /changelog|änderungsprotokoll|neuigkeiten|news|willkommen|welcome|info\b/i.test(title);
+      if (isChangelog) {
+        console.log(`[bot] Changelog-Fenster erkannt ("${title}") — schließe es.`);
+        setTimeout(() => { try { bot.closeWindow(win); } catch {} }, 400);
+      }
+    });
+
+    // Server-Chat mitloggen — wichtig zum Debuggen, was der Server will
+    bot.on("messagestr", (message) => {
+      const t = String(message).trim();
+      if (t) console.log("[chat]", t.slice(0, 160));
+    });
+
+    // Watchdog: falls der Server den Bot in einer Lobby/Limbo hält,
+    // wollen wir das im Log sehen — die Scans laufen trotzdem ab Login.
+    setTimeout(() => {
+      if (!bot.entity) {
+        console.log("[bot] Hinweis: 25 s nach Login noch kein Spawn-Entity.");
+        console.log("[bot] Der Server hält den Bot evtl. in einer Lobby — Scans laufen trotzdem.");
+      }
+    }, 25_000);
+
     // aktiver Versuch: /rules ausführen
     await sleep(2000);
     try {
