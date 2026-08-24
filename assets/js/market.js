@@ -190,17 +190,31 @@ async function openDetail(key) {
   loadHistory();
 }
 
+// Mapart-Infos aus dem extra-JSON fischen (Map-ID, Originalautor)
+function extraInfo(l) {
+  if (!l.extra) return null;
+  try {
+    const e = typeof l.extra === "string" ? JSON.parse(l.extra) : l.extra;
+    if (e && e.mapId) return `Map #${e.mapId}${e.mapAuthor ? " · " + e.mapAuthor : ""}`;
+  } catch { /* altes Format (pures Lore-Array) → ignorieren */ }
+  return null;
+}
+
 function renderListings(listings, market) {
   if (!listings || !listings.length) return '<p class="listing-none">Aktuell keine Einträge.</p>';
-  const rows = listings.slice(0, 12).map(l => `
+  const shown = listings.slice(0, 12);
+  const hasMap = shown.some((l) => extraInfo(l));
+
+  const rows = shown.map((l) => `
     <tr>
       <td class="price">${fmtPrice(l.price)}</td>
       <td>${l.qty}×</td>
       <td>${l.seller ? esc(l.seller) : "–"}</td>
+      ${hasMap ? `<td>${esc(extraInfo(l) || "–")}</td>` : ""}
       <td>${fmtTime(l.ts)}</td>
     </tr>`).join("");
   return `<table class="listing-table">
-    <thead><tr><th>${market === "ah" ? "Gesamtpreis" : "Stückpreis"}</th><th>Menge</th><th>Spieler</th><th>Stand</th></tr></thead>
+    <thead><tr><th>${market === "ah" ? "Gesamtpreis" : "Stückpreis"}</th><th>Menge</th><th>Spieler</th>${hasMap ? "<th>Map</th>" : ""}<th>Stand</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>`;
 }

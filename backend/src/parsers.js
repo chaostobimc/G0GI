@@ -33,11 +33,12 @@ const CONFIG = {
   // Items, die als "Nächste Seite"-Button gelten
   nextPagePatterns: [/^(nächste|next|weiter)\b/i, /[»»>]{1,3}.*seite/i, /^seite.*[»>]/i],
   prevPagePatterns: [/^(vorherige|previous|zurück|back)\b/i, /[««<]{1,3}.*seite/i],
-  // Typische Deko-Items, die keine Listings sind
+  // Typische Deko-Items, die keine Listings sind.
+  // Achtung: filled_map & book sind auf hugosmp.net ECHTE Handelsware
+  // (Mapart!) und dürfen NICHT hier stehen.
   junkItemNames: [
     "gray_stained_glass_pane", "black_stained_glass_pane", "red_stained_glass_pane",
-    "light_gray_stained_glass_pane", "brown_stained_glass_pane", "barrier",
-    "filled_map", "book", "air",
+    "light_gray_stained_glass_pane", "brown_stained_glass_pane", "barrier", "air",
   ],
 };
 
@@ -152,6 +153,18 @@ function extractSeller(text) {
   return null;
 }
 
+// Mapart-Metadaten (filled_map): Map-ID + Originalautor aus der Lore ziehen
+function extractMapMeta(text) {
+  const t = stripFormatting(text);
+  const id = t.match(/map-?id[:\s]*(\d+)/i);
+  const author = t.match(/originalautor[:\s]*([A-Za-z0-9_]{3,16})/i);
+  if (!id && !author) return null;
+  return {
+    mapId: id ? id[1] : null,
+    mapAuthor: author ? author[1] : null,
+  };
+}
+
 /* ---------- Slot-Klassifizierung ---------- */
 
 function isNavSlot(display) {
@@ -202,7 +215,7 @@ function parseListing(slot, pageNum) {
     qty: slot.count || 1,
     seller: extractSeller(haystack),
     page: pageNum,
-    extra: display.lore,
+    extra: { lore: display.lore, ...(extractMapMeta(haystack) || {}) },
   };
 }
 
@@ -235,4 +248,5 @@ module.exports = {
   parseNumber,
   extractPrice,
   extractSeller,
+  extractMapMeta,
 };
