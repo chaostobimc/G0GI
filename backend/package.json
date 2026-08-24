@@ -1,0 +1,20 @@
+{
+  "name": "gogi-market",
+  "version": "1.0.0",
+  "description": "G0GI Market: Mineflayer-Bot + AH/Order-Scraper + API für die Clan-Website",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "start:api-only": "DISABLE_BOT=true node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "minecraft-assets": "^1.19.0",
+    "mineflayer": "^4.37.1"
+  }
+}

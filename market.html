@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>G0GI Market · Auktionshaus &amp; Orders</title>
+  <meta name="description" content="G0GI Market — Auktionshaus- und Order-Preise von HugoSMP durchsuchen und Preisverläufe ansehen.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍒</text></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/market.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ======================= NAV ======================= -->
+  <header class="nav scrolled" id="nav">
+    <a href="index.html" class="logo">
+      <svg viewBox="0 0 64 64" class="logo-cherry" aria-hidden="true">
+        <path d="M32 10 C 26 18, 20 22, 16 30" stroke="#3e7c3a" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M32 10 C 38 16, 44 22, 46 28" stroke="#3e7c3a" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <ellipse cx="40" cy="12" rx="9" ry="5" fill="#5ca256" transform="rotate(-18 40 12)"/>
+        <circle cx="16" cy="42" r="13" fill="#c8102e"/>
+        <circle cx="45" cy="40" r="14" fill="#e02546"/>
+        <circle cx="41" cy="35" r="4" fill="#ff8fa3" opacity=".7"/>
+      </svg>
+      <span>G0GI</span>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html#manifest">Der Clan</a>
+      <a href="index.html#tools">Tools</a>
+      <a href="index.html#chronik">Chronik</a>
+      <a href="index.html#team">Team</a>
+      <a href="market.html" class="nav-cta">Market 🍒</a>
+    </nav>
+
+    <button class="burger" id="burger" aria-label="Menü öffnen" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main>
+
+  <!-- ======================= HEAD ======================= -->
+  <section class="market-head">
+    <div class="blob blob-a" aria-hidden="true"></div>
+    <div class="market-head-inner">
+      <p class="kicker">Live von hugosmp.net</p>
+      <h2 style="font-size:clamp(2.2rem,6vw,4rem)">G0GI Market</h2>
+      <p class="section-sub">
+        Alle <strong>Auktionen</strong> (/ah, Gesamtpreis) und <strong>Orders</strong> (/order, Stückpreis)
+        vom Server — durchsuchbar auf Deutsch und Englisch, mit Preisverlauf.
+      </p>
+      <div class="status-bar" id="statusBar">
+        <span class="status-chip"><span class="status-dot" id="botDot"></span> Bot: <b id="botStatus">lädt …</b></span>
+        <span class="status-chip">Letzter Scan: <b id="lastScan">–</b></span>
+        <span class="status-chip">Items bekannt: <b id="itemCount">–</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= SUCHE ======================= -->
+  <section class="market-controls">
+    <div class="search-wrap">
+      <input type="search" id="searchInput" placeholder="Item suchen — deutsch oder englisch, z. B. „Diamantschwert“ oder „diamond sword“" autocomplete="off">
+    </div>
+    <div class="chips">
+      <button class="chip active" data-market="all">Alle</button>
+      <button class="chip" data-market="ah">Auktionen</button>
+      <button class="chip" data-market="orders">Orders</button>
+    </div>
+  </section>
+
+  <p class="market-result-info" id="resultInfo"></p>
+
+  <div class="item-grid" id="itemGrid">
+    <div class="empty-state">
+      <span class="big-emoji">🍒</span>
+      Lade Marktdaten …
+    </div>
+  </div>
+
+  </main>
+
+  <!-- ======================= DETAIL-OVERLAY ======================= -->
+  <div class="detail-overlay" id="detailOverlay">
+    <div class="detail-panel">
+      <button class="detail-close" id="detailClose" aria-label="Schließen">✕</button>
+      <div class="detail-head">
+        <div class="item-icon"><img id="detailIcon" alt=""></div>
+        <div>
+          <h2 id="detailName">–</h2>
+          <p class="item-name-en" id="detailNameEn">–</p>
+        </div>
+      </div>
+
+      <p class="detail-sub">Preisverlauf</p>
+      <div class="range-btns">
+        <button class="range-btn" data-days="7">7 Tage</button>
+        <button class="range-btn active" data-days="14">14 Tage</button>
+        <button class="range-btn" data-days="30">30 Tage</button>
+      </div>
+      <div class="chart-box">
+        <div class="chart-legend">
+          <span class="lg-ah">Auktionen (günstigster Gesamtpreis)</span>
+          <span class="lg-orders">Orders (höchstes Gebot, Stückpreis)</span>
+        </div>
+        <div id="chartArea"></div>
+        <div class="chart-tip" id="chartTip"></div>
+      </div>
+
+      <p class="detail-sub">Aktuelle Auktionen</p>
+      <div id="ahListings"></div>
+
+      <p class="detail-sub">Aktuelle Orders</p>
+      <div id="orderListings"></div>
+    </div>
+  </div>
+
+  <!-- ======================= FOOTER ======================= -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">G0GI 🍒</span>
+        <p>Der Kirsch-Clan auf HugoSMP.</p>
+      </div>
+      <div class="footer-cols">
+        <div>
+          <h4>Schnellzugriff</h4>
+          <a href="index.html#tools">Tools</a>
+          <a href="index.html#chronik">Chronik</a>
+          <a href="index.html#team">Team</a>
+          <a href="index.html#mitmachen">Mitmachen</a>
+        </div>
+        <div>
+          <h4>Kleingedrucktes</h4>
+          <p class="footer-fine">Kein offizielles Minecraft-Produkt.<br>Nicht von Mojang genehmigt oder mit Mojang verbunden.</p>
+        </div>
+      </div>
+    </div>
+    <p class="footer-line">G0GI · HugoSMP · Market-Daten werden regelmäßig automatisch gescannt</p>
+  </footer>
+
+  <script src="assets/js/market.js"></script>
+</body>
+</html>
